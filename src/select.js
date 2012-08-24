@@ -13,6 +13,7 @@ var cssthief = { // Namespace
 		// TODO: Generate proper selectors for CSS?
 		// TODO: Grab files / images referenced in CSS as well and alter paths?
 		// TODO: Optionally, tidy it all up
+		// TODO: Make sure to somehow grab pseudo styles: hover, etc..
 		// TODO: Save to the clipboard
 		// TODO: Publish to jsfiddle or something similar?
 		cssthief.disable();
