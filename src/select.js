@@ -5,14 +5,40 @@ var cssthief = { // Namespace
 		"-webkit-box-shadow": null,
 		zIndex: null
 	},
-	onclick: null,
-	enabled: false;
+	click: function(e){
+		var el = e.target;
+		// TODO: Fetch HTML and CSS
+		// TODO: Strip comments and other useless tags
+		// TODO: Strip attributes, such as classnames, ids, etc..
+		// TODO: Generate proper selectors for CSS?
+		// TODO: Grab files / images referenced in CSS as well and alter paths?
+		// TODO: Optionally, tidy it all up
+		// TODO: Save to the clipboard
+		// TODO: Publish to jsfiddle or something similar?
+		cssthief.disable();
+		// Copy HTML to clipboard
+		// FIXME: This isn't working, despite permissions
+		var html = document.createElement("textarea");
+		html.style.visibility = "hidden";
+		document.body.appendChild(html);
+		html.value = el.outerHTML;
+		html.focus();
+		document.execCommand("SelectAll");
+		document.execCommand("Copy", false, null);
+		document.body.removeChild(html);
+		
+		e.preventDefault();
+	},
+	enabled: false,
 	enable: function(){
-		enabled = true;
+		cssthief.enabled = true;
+		window.addEventListener("click", cssthief.click);
 	},
 	disable: function(){
-		enabled = false;
+		cssthief.enabled = false;
 		cssthief.restoreStyles();
+		window.removeEventListener("click", cssthief.click);
+		
 	},
 	restoreStyles: function(){
 		if(cssthief.el){
@@ -24,7 +50,7 @@ var cssthief = { // Namespace
 
 window.addEventListener("mousemove", function(e){
 	var el = document.elementFromPoint(e.clientX, e.clientY);
-	if(cssthief.el != el && enabled){
+	if(cssthief.el != el && cssthief.enabled){
 		// Restore old styles
 		cssthief.restoreStyles();
 		// Save styles from new element
